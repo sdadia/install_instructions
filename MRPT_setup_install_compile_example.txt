@@ -1,0 +1,79 @@
+SETUP AND INSTALLATION
+----------------------
+
+- Install VTK from source
+- Install wxWidgests from source
+- Install Eigen3
+- Install OpenCV
+- Install dependencies from source, skip libopencv
+- Change files in /mrpt/libs/maps/src/maps/CRandomFieldGridMap3D.cpp to include header of vtk file
+    #include "/usr/include/vtk-7.1/vtkStructuredGrid.h"
+    #include "/usr/include/vtk-7.1/vtkDoubleArray.h"
+    #include "/usr/include/vtk-7.1/vtkPointData.h"
+    #include "/usr/include/vtk-7.1/vtkVersion.h"
+    #include "/usr/include/vtk-7.1/vtkCellArray.h"
+    #include "/usr/include/vtk-7.1/vtkPoints.h"
+    #include "/usr/include/vtk-7.1/vtkXMLStructuredGridWriter.h"
+    #include "/usr/include/vtk-7.1/vtkStructuredGrid.h"
+    #include "/usr/include/vtk-7.1/vtkSmartPointer.h"
+- mkdir build
+- cd build
+- cmake ..
+- In ccmake, change BUILD_ASSIMP to OFF
+- In ccmake, change BUILD_TYPE to Release
+- make -j2
+- make test
+- sudo make install
+- sudo ldconfig
+
+Most probably, the mrpt will be installed in /usr/local/include/mrpt/
+If not, see the variable CMAKE_INSTALL_PREFIX by doing 'ccmake ..' in build directory
+
+
+POST INSTALLATION
+-----------------
+
+- To enable compiling via pkg-config, do this in terminal
+  export PKG_CONFIG_PATH=[path-to-mrpt-build]/pkgconfig-no-install:$PKG_CONFIG_PATH
+  
+  This link indicates the above solution
+  http://www.mrpt.org/tutorials/programming/first-steps/compiling_custom_applications_in_linux_with_a_makefile_and_pkg-config/
+  
+  
+COMPILING
+---------
+
+compile using 
+`pkg-config --cflags --libs mrpt-base`
+To see a list of all avalibale module for compiling and linking
+pkg-config --list-all | grep mrpt
+
+
+INCLUDE HEADERS
+---------------
+#include "mrpt/utils.h"
+#include "mrpt/base.h"
+
+There are may more headers in the folder /usr/local/include/mrpt/
+
+
+EXAMPLE TO TEST
+---------------
+
+#include <iostream>
+#include "mrpt/utils.h"
+#include "mrpt/base.h"
+
+using namespace mrpt::poses;
+using namespace mrpt::utils;
+int main()
+{
+    CPose3D p (1.0,
+               2.0,
+               3.0,
+               DEG2RAD(3.0),
+               DEG2RAD(20.0),
+               DEG2RAD(90.0));
+    std::cout << p << std::endl;
+    return 0;
+}
